@@ -214,6 +214,10 @@ cri::cri(container_cache_interface &cache) : container_engine_base(cache)
 	}
 
 	// Try all specified unix socket paths
+	// NOTE: having multiple container runtimes on the same host is a sporadic case,
+	// so we wouldn't make things complex to support that.
+	// On the other hand, specifying multiple unix socket paths (and using only the first match)
+	// will solve the "same config, multiple hosts" use case.
 	for (auto &p : s_cri_unix_socket_paths)
 	{
 		if(p.empty()) {
