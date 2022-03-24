@@ -73,6 +73,8 @@ option(WITH_CHISEL "Include chisel implementation" OFF)
 
 option(CREATE_TEST_TARGETS "Enable make-targets for unit testing" ON)
 
+option(BUILD_USERSPACE "Build the userspace components" ON)
+
 include(libscap)
 include(libsinsp)
 

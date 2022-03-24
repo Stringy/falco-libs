@@ -99,32 +99,33 @@ if(CYGWIN OR WIN32)
 		windows_hal.c)
 endif()
 
-add_library(scap STATIC
-	${targetfiles})
+if (BUILD_USERSPACE)
+	add_library(scap STATIC ${targetfiles})
 
-if(USE_BUNDLED_ZLIB AND NOT MINIMAL_BUILD)
-	add_dependencies(scap zlib)
-endif()
+	if(USE_BUNDLED_ZLIB AND NOT MINIMAL_BUILD)
+		add_dependencies(scap zlib)
+	endif()
 
-if (CMAKE_SYSTEM_NAME MATCHES "SunOS")
-	target_link_libraries(scap
-		socket nsl)
-elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
-	target_link_libraries(scap
-		elf
-		rt)
-elseif (WIN32)
-	target_link_libraries(scap
-		Ws2_32.lib)
-elseif (CYGWIN)
-	target_link_libraries(scap
-		/lib/w32api/libpsapi.a
-		${WIN_HAL_LIB}/dragent_win_hal.lib)
-endif()
+	if (CMAKE_SYSTEM_NAME MATCHES "SunOS")
+		target_link_libraries(scap
+			socket nsl)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+		target_link_libraries(scap
+			elf
+			rt)
+	elseif (WIN32)
+		target_link_libraries(scap
+			Ws2_32.lib)
+	elseif (CYGWIN)
+		target_link_libraries(scap
+			/lib/w32api/libpsapi.a
+			${WIN_HAL_LIB}/dragent_win_hal.lib)
+	endif()
 
-if(NOT MINIMAL_BUILD)
-target_link_libraries(scap
-	"${ZLIB_LIB}")
+	if(NOT MINIMAL_BUILD)
+		target_link_libraries(scap
+			"${ZLIB_LIB}")
+	endif()
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
