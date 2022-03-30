@@ -27,6 +27,11 @@ ifeq ($(NEEDS_WORKAROUND), 1)
 	KBUILD_CPPFLAGS += -DCOS_73_WORKAROUND
 endif
 
+IS_CLANG_OLDER_THAN_10 := $(shell expr `$(CLANG) -dumpversion | cut -f1 -d.` \<= 10)
+ifeq ($(IS_CLANG_OLDER_THAN_10), 1)
+	KBUILD_CPPFLAGS := $(filter-out -fmacro-prefix-map=%,$(KBUILD_CPPFLAGS))
+endif
+
 all:
 	$(MAKE) -C $(KERNELDIR) M=$$PWD
 
